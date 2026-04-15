@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Policy & Governance Organizations Directory</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f5f5f3;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 2rem;
+  }
+
+  header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 0.4rem;
+  }
+
+  header p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1rem;
+    align-items: center;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 360px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+  }
+
+  #search {
+    width: 100%;
+    padding: 8px 12px 8px 34px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #111;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  #search:focus { border-color: #6366f1; }
+
+  .filter-btn {
+    font-size: 12px;
+    padding: 6px 14px;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .filter-btn:hover { border-color: #aaa; color: #111; }
+
+  .filter-btn.active {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+  }
+
+  .stats {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 1.25rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+
+  .card:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-color: #d0d0d0;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .card-name a {
+    color: #4f46e5;
+    text-decoration: none;
+  }
+
+  .card-name a:hover { text-decoration: underline; }
+
+  .badge {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+
+  .badge-academic       { background: #d1fae5; color: #065f46; }
+  .badge-think-tank     { background: #dbeafe; color: #1e40af; }
+  .badge-civil-society  { background: #fef3c7; color: #92400e; }
+  .badge-intergovernmental { background: #ede9fe; color: #4c1d95; }
+  .badge-industry       { background: #fee2e2; color: #991b1b; }
+
+  .card-desc {
+    font-size: 12.5px;
+    color: #666;
+    line-height: 1.55;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: #999;
+    font-size: 15px;
+    grid-column: 1 / -1;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-academic       { background: #10b981; }
+  .dot-think-tank     { background: #3b82f6; }
+  .dot-civil-society  { background: #f59e0b; }
+  .dot-intergovernmental { background: #8b5cf6; }
+  .dot-industry       { background: #ef4444; }
+
+  footer {
+    margin-top: 3rem;
+    font-size: 12px;
+    color: #aaa;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 20px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <header>
+    <h1>AI Policy &amp; Governance Organizations</h1>
+    <p>100 academic institutions, think tanks, civil society groups, intergovernmental bodies, and industry policy teams working on AI policy and stakeholder governance.</p>
+  </header>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search" placeholder="Search organizations..." oninput="render()">
+    </div>
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('academic', this)">Academic</button>
+    <button class="filter-btn" onclick="setFilter('think-tank', this)">Think tanks</button>
+    <button class="filter-btn" onclick="setFilter('civil-society', this)">Civil society</button>
+    <button class="filter-btn" onclick="setFilter('intergovernmental', this)">Intergovernmental</button>
+    <button class="filter-btn" onclick="setFilter('industry', this)">Industry</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-academic"></div>Academic</div>
+    <div class="legend-item"><div class="legend-dot dot-think-tank"></div>Think tank</div>
+    <div class="legend-item"><div class="legend-dot dot-civil-society"></div>Civil society</div>
+    <div class="legend-item"><div class="legend-dot dot-intergovernmental"></div>Intergovernmental</div>
+    <div class="legend-item"><div class="legend-dot dot-industry"></div>Industry</div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    Compiled April 2026 &mdash; Links open organization websites in a new tab.
+  </footer>
+</div>
+
+<script>
+const orgs = [
+  { name: "Centre for the Governance of AI (GovAI)", url: "https://www.governance.ai", type: "think-tank", desc: "AI governance research informing international treaties, compute thresholds, and safety frameworks." },
+  { name: "Center for Security and Emerging Technology (CSET)", url: "https://cset.georgetown.edu", type: "think-tank", desc: "Georgetown-based; shapes U.S. AI policy on semiconductors, supply chains, and strategic competition." },
+  { name: "Partnership on AI (PAI)", url: "https://partnershiponai.org", type: "civil-society", desc: "Multi-stakeholder coalition of industry, academia, and civil society setting shared AI norms." },
+  { name: "AI Now Institute", url: "https://ainowinstitute.org", type: "academic", desc: "NYU-based; researches social and labor impacts of AI, algorithmic bias, and surveillance." },
+  { name: "Center for AI Safety (CAIS)", url: "https://safe.ai", type: "think-tank", desc: "Pushes AI existential risk into mainstream policy; central node connecting alignment and policymakers." },
+  { name: "Ada Lovelace Institute", url: "https://www.adalovelaceinstitute.org", type: "think-tank", desc: "UK-based; bridges technical research with human-rights-focused AI policymaking." },
+  { name: "Brookings Institution (AI Program)", url: "https://www.brookings.edu/topic/artificial-intelligence/", type: "think-tank", desc: "Widely cited AI policy research emphasizing innovation and democratic accountability." },
+  { name: "Stanford HAI (Human-Centered AI)", url: "https://hai.stanford.edu", type: "academic", desc: "Produces the AI Index Report tracking global AI investment, adoption, and capability trends." },
+  { name: "Center for a New American Security (CNAS)", url: "https://www.cnas.org", type: "think-tank", desc: "Influential research on AI's role in military competition and autonomous weapons." },
+  { name: "Institute for AI Policy and Strategy (IAPS)", url: "https://www.iaps.ai", type: "think-tank", desc: "Nonpartisan think tank producing policy research on advanced AI and AGI implications." },
+  { name: "The Future Society", url: "https://thefuturesociety.org", type: "civil-society", desc: "Conducts civil society consultations on AI governance priorities and frameworks." },
+  { name: "Electronic Frontier Foundation (EFF)", url: "https://www.eff.org", type: "civil-society", desc: "Defends civil liberties in the digital world, including AI policy and privacy." },
+  { name: "Council on Foreign Relations (CFR)", url: "https://www.cfr.org", type: "think-tank", desc: "Foreign policy research on AI governance, geopolitical competition, and national security." },
+  { name: "RAND Corporation (AI Program)", url: "https://www.rand.org/topics/artificial-intelligence.html", type: "think-tank", desc: "Broad AI research covering defense, policy, health, and societal impacts." },
+  { name: "OECD.AI Policy Observatory", url: "https://oecd.ai", type: "intergovernmental", desc: "Tracks national AI strategies, policies, and regulatory developments globally." },
+  { name: "UNESCO AI Ethics Division", url: "https://www.unesco.org/ethics-ai", type: "intergovernmental", desc: "Developed the global Recommendation on the Ethics of AI; supports member-state implementation." },
+  { name: "UN AI Advisory Body", url: "https://www.un.org/ai-advisory-body", type: "intergovernmental", desc: "Provides recommendations on international governance of AI for the UN Secretary-General." },
+  { name: "Global Partnership on AI (GPAI)", url: "https://gpai.ai", type: "intergovernmental", desc: "Multi-stakeholder initiative supporting responsible AI development aligned with human rights." },
+  { name: "IAPP (International Association of Privacy Professionals)", url: "https://iapp.org", type: "industry", desc: "World's largest network for privacy and AI governance professionals." },
+  { name: "Future of Life Institute (FLI)", url: "https://futureoflife.org", type: "think-tank", desc: "Works to mitigate existential and civilizational-scale risks from AI and other technologies." },
+  { name: "Leverhulme Centre for the Future of Intelligence", url: "https://lcfi.ac.uk", type: "academic", desc: "Cambridge-based interdisciplinary research on AI and its implications for humanity." },
+  { name: "Oxford Internet Institute", url: "https://www.oii.ox.ac.uk", type: "academic", desc: "Oxford-based research on governance, ethics, and societal impacts of internet and AI." },
+  { name: "Center for Human-Compatible AI (CHAI)", url: "https://humancompatible.ai", type: "academic", desc: "UC Berkeley; develops AI systems provably aligned with human values and preferences." },
+  { name: "Berkman Klein Center (Harvard)", url: "https://cyber.harvard.edu", type: "academic", desc: "Harvard center exploring cyberspace policy, AI governance, and digital society." },
+  { name: "MIT Media Lab — AI Ethics Research", url: "https://www.media.mit.edu/groups/ethics-and-governance-of-ai/overview/", type: "academic", desc: "Multidisciplinary AI ethics and governance research at MIT." },
+  { name: "Alan Turing Institute", url: "https://www.turing.ac.uk", type: "academic", desc: "UK national institute for data science and AI, with strong AI ethics and policy programs." },
+  { name: "World Economic Forum (AI & ML)", url: "https://www.weforum.org/agenda/artificial-intelligence/", type: "intergovernmental", desc: "Convenes public-private AI governance initiatives and publishes AI policy playbooks." },
+  { name: "Chatham House (Digital Society)", url: "https://www.chathamhouse.org/topics/technology", type: "think-tank", desc: "UK foreign policy think tank with growing work on AI governance and digital statecraft." },
+  { name: "Institute for Ethics in AI (TUM)", url: "https://ieai.mcts.tum.de", type: "academic", desc: "Technical University of Munich institute on ethical and societal dimensions of AI." },
+  { name: "AI for People (EISMD / Atomium)", url: "https://www.eismd.eu/ai4people/", type: "civil-society", desc: "Multi-stakeholder forum shaping the social impact of AI in Europe." },
+  { name: "AlgorithmWatch", url: "https://algorithmwatch.org", type: "civil-society", desc: "European nonprofit scrutinizing automated decision-making systems and their societal effects." },
+  { name: "Access Now", url: "https://www.accessnow.org", type: "civil-society", desc: "Defends digital rights globally, including surveillance, biometrics, and AI policy." },
+  { name: "Data & Society Research Institute", url: "https://datasociety.net", type: "academic", desc: "Independent research organization studying social and cultural issues from data-centric tech." },
+  { name: "Center for Information Technology Policy (CITP)", url: "https://citp.princeton.edu", type: "academic", desc: "Princeton interdisciplinary center on digital technology and society." },
+  { name: "Open AI Policy Institute", url: "https://www.openaipi.org", type: "think-tank", desc: "Develops policy frameworks for open AI development and deployment standards." },
+  { name: "Information Technology and Innovation Foundation (ITIF)", url: "https://itif.org", type: "think-tank", desc: "Pro-innovation think tank on technology and AI policy research." },
+  { name: "Center for Data Innovation", url: "https://www2.datainnovation.org", type: "think-tank", desc: "Nonprofit research on data and AI policy in Washington, D.C. and Brussels." },
+  { name: "Article 19", url: "https://www.article19.org", type: "civil-society", desc: "Human rights org advocating for freedom of expression and AI's impact on speech." },
+  { name: "Amnesty International (Tech & Human Rights)", url: "https://www.amnesty.org/en/latest/campaigns/2021/01/the-rise-of-ai/", type: "civil-society", desc: "Campaigns on AI-driven surveillance, facial recognition, and human rights abuses." },
+  { name: "Human Rights Watch (Digital Rights)", url: "https://www.hrw.org/topic/technology-and-rights", type: "civil-society", desc: "Documents harms from AI surveillance and automated systems globally." },
+  { name: "OpenGov Foundation", url: "https://opengovfoundation.org", type: "civil-society", desc: "Promotes transparency and public engagement in government AI use." },
+  { name: "Responsible AI Institute", url: "https://www.responsible.ai", type: "industry", desc: "Provides AI auditing frameworks and certification programs for organizations." },
+  { name: "AI Governance Lab (IE University)", url: "https://aigoverancelab.ie.edu", type: "academic", desc: "European academic lab focused on AI governance practice and regulation." },
+  { name: "Portulans Institute", url: "https://portulansinstitute.org", type: "think-tank", desc: "Multi-stakeholder AI governance research including African and Global South perspectives." },
+  { name: "African Observatory on Responsible AI", url: "https://www.africaai.org", type: "civil-society", desc: "Promotes ethical AI across Africa with a multi-stakeholder network." },
+  { name: "AI Safety Asia", url: "https://aisafetyasia.org", type: "civil-society", desc: "Global nonprofit harmonizing international AI governance from an Asian perspective." },
+  { name: "Mila — Quebec AI Institute (Policy)", url: "https://mila.quebec/en/ai-society/ai-policy/", type: "academic", desc: "Leading AI research institute with active AI ethics and governance engagement." },
+  { name: "Digital Futures Commission (5Rights Foundation)", url: "https://digitalfuturescommission.org.uk", type: "civil-society", desc: "Focuses on children's rights in digital and AI environments." },
+  { name: "Pew Research Center (AI Studies)", url: "https://www.pewresearch.org/topic/artificial-intelligence/", type: "think-tank", desc: "Public opinion and societal research on attitudes toward AI and technology." },
+  { name: "International Panel on the Information Environment (IPIE)", url: "https://www.ipie.org", type: "intergovernmental", desc: "Applies IPCC-style approach to evidence on information ecosystems and AI-generated content." },
+  { name: "Aspen Institute Digital Program", url: "https://www.aspeninstitute.org/programs/digital-society-program/", type: "think-tank", desc: "Convenes leaders on digital technology policy including AI governance and equity." },
+  { name: "Carnegie Endowment for International Peace (AI)", url: "https://carnegieendowment.org/specialprojects/ai-global-surveillance-index", type: "think-tank", desc: "Tracks AI surveillance globally; researches AI geopolitics and governance." },
+  { name: "Overseas Development Institute (AI & Development)", url: "https://odi.org/en/about/our-work/digital-technology/", type: "think-tank", desc: "Explores AI's impact on development, equity, and governance in lower-income countries." },
+  { name: "AI Commons", url: "https://aicommons.com", type: "civil-society", desc: "Open community developing shared AI governance resources and principles for practitioners." },
+  { name: "IEEE Standards Association (AI Ethics)", url: "https://standards.ieee.org/industry-connections/ec/autonomous-systems/", type: "industry", desc: "Develops technical standards for ethically aligned AI design and implementation." },
+  { name: "BSA | The Software Alliance (AI Policy)", url: "https://www.bsa.org/policy-filings/artificial-intelligence/", type: "industry", desc: "Enterprise software industry voice advocating for responsible AI policy frameworks." },
+  { name: "Internet Society", url: "https://www.internetsociety.org/issues/artificial-intelligence/", type: "civil-society", desc: "Promotes open, globally connected internet; advocates on AI and digital rights policy." },
+  { name: "Global Network Initiative (GNI)", url: "https://globalnetworkinitiative.org", type: "civil-society", desc: "Multi-stakeholder initiative on free expression and privacy in the tech sector." },
+  { name: "Center for Democracy & Technology (CDT)", url: "https://cdt.org", type: "civil-society", desc: "Advocates for civil rights and democratic values in AI and tech policy." },
+  { name: "Open Government Partnership (OGP)", url: "https://www.opengovpartnership.org", type: "intergovernmental", desc: "Multilateral initiative committing governments to transparent, accountable AI governance." },
+  { name: "Center on Privacy & Technology (Georgetown)", url: "https://www.law.georgetown.edu/privacy-technology-center/", type: "academic", desc: "Law school center on surveillance, facial recognition, and AI policy." },
+  { name: "Stiftung Neue Verantwortung (SNV)", url: "https://www.stiftung-nv.de/en", type: "think-tank", desc: "German think tank advising policymakers on AI, cybersecurity, and digital governance." },
+  { name: "Transatlantic AI eXchange (TAIX)", url: "https://www.ta-ix.org", type: "think-tank", desc: "Transatlantic policy dialogue on AI governance between US and European stakeholders." },
+  { name: "NESTA (AI and Innovation Policy)", url: "https://www.nesta.org.uk/project/ai-futures/", type: "think-tank", desc: "UK innovation foundation researching AI's societal, economic, and governance implications." },
+  { name: "Global Priorities Institute (Oxford)", url: "https://globalprioritiesinstitute.org", type: "academic", desc: "Researches existential and transformative risks including advanced AI." },
+  { name: "Yale AI Policy Initiative (YAIPI)", url: "https://www.yaleaipolicy.org", type: "academic", desc: "Yale student-led AI policy advocacy and research group." },
+  { name: "NYU Center for Responsible AI", url: "https://r-ai.co", type: "academic", desc: "Interdisciplinary research on safe, reliable, and equitable AI systems." },
+  { name: "ACLU (Speech, Privacy & Tech)", url: "https://www.aclu.org/ai-technology", type: "civil-society", desc: "Litigates and advocates on AI surveillance, facial recognition, and civil liberties." },
+  { name: "All Tech Is Human", url: "https://alltechishuman.org", type: "civil-society", desc: "Builds a responsible tech ecosystem by connecting practitioners, advocates, and policymakers." },
+  { name: "Tech Policy Press", url: "https://techpolicy.press", type: "civil-society", desc: "Independent journalism and commentary on AI and tech governance debates." },
+  { name: "Global Centre for AI Governance (Oxford Martin)", url: "https://www.oxfordmartin.ox.ac.uk/ai-governance/", type: "academic", desc: "Oxford Martin School center on international and long-term AI governance challenges." },
+  { name: "Digital Europe (Industry Group)", url: "https://www.digitaleurope.org", type: "industry", desc: "Represents European digital industry in AI policy, including the EU AI Act engagement." },
+  { name: "Konrad Adenauer Stiftung (AI & Digital)", url: "https://www.kas.de/en/digitalisation", type: "think-tank", desc: "German foundation shaping conservative perspectives on AI regulation globally." },
+  { name: "Luminate (AI & Democracy)", url: "https://www.luminategroup.com", type: "civil-society", desc: "Funds civil society work on AI, data rights, and democratic accountability." },
+  { name: "Future of Privacy Forum (FPF)", url: "https://fpf.org", type: "think-tank", desc: "Advances principled data and AI privacy policy for industry and government." },
+  { name: "AI Safety Institute (UK AISI)", url: "https://www.gov.uk/government/organisations/ai-safety-institute", type: "intergovernmental", desc: "UK government body advancing AI safety research and international coordination." },
+  { name: "US AI Safety Institute (NIST / AISI)", url: "https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence", type: "intergovernmental", desc: "US government AI safety evaluation and governance body under NIST." },
+  { name: "Seoul AI Safety Network", url: "https://www.seoulaiforum.ai", type: "intergovernmental", desc: "International network coordinating AI safety commitments post-UK and Seoul summits." },
+  { name: "Institute for the Future (IFTF)", url: "https://www.iftf.org/our-research/technology-horizons/", type: "think-tank", desc: "Futures research on technology governance and AI's long-term societal trajectories." },
+  { name: "Atlantic Council (GeoTech Center)", url: "https://www.atlanticcouncil.org/programs/geotech-center/", type: "think-tank", desc: "Studies AI geopolitics, data governance, and tech competition across nations." },
+  { name: "New America (Open Technology Institute)", url: "https://www.newamerica.org/oti/", type: "think-tank", desc: "Progressive policy research on AI, broadband, surveillance, and digital equity." },
+  { name: "Connected Commerce Council", url: "https://connectedcouncil.org", type: "industry", desc: "Advocates for small-business-friendly AI and digital policy in the US." },
+  { name: "Electronic Privacy Information Center (EPIC)", url: "https://epic.org", type: "civil-society", desc: "Litigates and advocates to protect privacy and limit AI surveillance." },
+  { name: "Bipartisan Policy Center (Tech Program)", url: "https://bipartisanpolicy.org/issue/technology/", type: "think-tank", desc: "Centrist US policy institute with active work on AI governance and regulation." },
+  { name: "ACM US Technology Policy Committee (USACM)", url: "https://www.acm.org/public-policy", type: "academic", desc: "ACM's public policy arm providing technical expertise on AI and computing governance." },
+  { name: "Data Privacy Brasil", url: "https://www.dataprivacybr.org/en/", type: "civil-society", desc: "Brazilian digital rights organization focused on AI governance and data protection." },
+  { name: "C Minds (Latin America)", url: "https://cminds.co", type: "civil-society", desc: "Action tank promoting responsible AI development and research in Latin America." },
+  { name: "OdiseIA", url: "https://odiseia.org", type: "civil-society", desc: "Independent global think tank shaping responsible and ethical AI futures." },
+  { name: "Tierra Común", url: "https://tierracomun.net", type: "civil-society", desc: "Coalition advancing data decolonization and AI governance for the Global South." },
+  { name: "Research ICT Africa (RIA)", url: "https://researchICTafrica.net", type: "think-tank", desc: "African think tank on sustainable digital economy and AI governance in Africa." },
+  { name: "Manushya Foundation", url: "https://www.manushyafoundation.org", type: "civil-society", desc: "Feminist human rights organization addressing AI's impacts on equality and justice." },
+  { name: "Centre for the Study of Existential Risk (CSER)", url: "https://www.cser.ac.uk", type: "academic", desc: "Cambridge center studying catastrophic risks from advanced AI and emerging technology." },
+  { name: "Global Governance Institute (GGI)", url: "https://www.globalgovernance.eu", type: "academic", desc: "Brussels-based institute training professionals on AI governance and international regulation." },
+  { name: "Globethics", url: "https://www.globethics.net", type: "civil-society", desc: "International NGO advancing ethical leadership globally, including AI ethics frameworks." },
+  { name: "Anthropic Policy Team", url: "https://www.anthropic.com/policy", type: "industry", desc: "Anthropic's internal policy team engaging governments and stakeholders on safe AI governance." },
+  { name: "Google DeepMind Safety (Policy)", url: "https://deepmind.google/safety-research/", type: "industry", desc: "AI safety research and policy engagement from one of the leading AI labs." },
+  { name: "OpenAI Government Affairs", url: "https://openai.com/global-affairs/", type: "industry", desc: "OpenAI's public policy team engaging on AI governance and safety regulations." },
+  { name: "Microsoft Responsible AI", url: "https://www.microsoft.com/en-us/ai/responsible-ai", type: "industry", desc: "Responsible AI standards, transparency reports, and government policy engagement." },
+  { name: "Association for the Advancement of AI (AAAI)", url: "https://www.aaai.org/about-aaai/about/", type: "academic", desc: "International scientific society promoting responsible AI research and its societal impacts." },
+  { name: "AI Forum of New Zealand", url: "https://aiforum.org.nz", type: "civil-society", desc: "Member-funded NGO connecting NZ's AI innovators, regulators, researchers, and public." },
+  { name: "Digital Civil Society Lab (Stanford)", url: "https://pacscenter.stanford.edu/research/digital-civil-society-lab/", type: "academic", desc: "Stanford lab investigating challenges and opportunities for civil society in the digital age." },
+  { name: "SciencesPo PSIA Technology & Governance Hub", url: "https://www.sciencespo.fr/psia/", type: "academic", desc: "Paris accelerating collaborative technology and governance research on global AI affairs." }
+];
+
+let activeFilter = 'all';
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function badgeLabel(type) {
+  return { 'academic': 'Academic', 'think-tank': 'Think tank', 'civil-society': 'Civil society', 'intergovernmental': 'Intergovernmental', 'industry': 'Industry' }[type] || type;
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = orgs.filter(o => {
+    const matchFilter = activeFilter === 'all' || o.type === activeFilter;
+    const matchSearch = !q || o.name.toLowerCase().includes(q) || o.desc.toLowerCase().includes(q);
+    return matchFilter && matchSearch;
+  });
+
+  document.getElementById('stats').textContent = filtered.length + ' of ' + orgs.length + ' organizations';
+
+  const grid = document.getElementById('grid');
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="no-results">No organizations match your search.</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(o => `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-name"><a href="${o.url}" target="_blank" rel="noopener noreferrer">${o.name}</a></div>
+        <span class="badge badge-${o.type}">${badgeLabel(o.type)}</span>
+      </div>
+      <div class="card-desc">${o.desc}</div>
+    </div>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>
